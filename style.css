@@ -1,8 +1,9 @@
 :root { --ink:#5d4b47; --cream:#fffaf0; --blue:#bfe4fa; --pink:#ffc7c2; --mint:#ccebdc; --yellow:#ffe7a3; }
 * { box-sizing:border-box; }
+html,body { width:100%; max-width:100%; overflow-x:hidden; overflow-x:clip; }
 body { margin:0; min-height:100vh; color:var(--ink); background:linear-gradient(145deg,#e8f5ea,#fff7df 55%,#f9e5dc); font-family:"Zen Maru Gothic",sans-serif; }
 button { font:inherit; cursor:pointer; border:0; }
-.app-shell { width:min(100%,720px); min-height:100vh; margin:auto; overflow:hidden; position:relative; background:var(--cream); box-shadow:0 0 45px #b7c9b655; }
+.app-shell { width:min(100%,720px); max-width:100%; min-height:100vh; margin:auto; overflow:hidden; position:relative; background:var(--cream); box-shadow:0 0 45px #b7c9b655; }
 .topbar { height:64px; display:flex; justify-content:space-between; align-items:center; padding:0 22px; position:relative; z-index:2; }
 .brand { font-weight:900; font-size:1.13rem; color:#5398c9; letter-spacing:.05em; }.brand span{display:inline-grid;place-items:center;width:25px;height:25px;color:white;background:#7bc4e5;border-radius:50%;}.brand small{font-size:.6rem;color:#df8e82;letter-spacing:0;}
 .icon-button { background:#fff; width:38px;height:38px;border-radius:50%; box-shadow:0 3px 9px #b9aa9a44; }
@@ -135,3 +136,24 @@ button { font:inherit; cursor:pointer; border:0; }
 body .coloring-canvas{height:min(108vw,500px);max-height:510px;background:#fffdf8;border-color:#f5e8d2}body .coloring-canvas:before{z-index:5;border-color:#e3d1b7}body .coloring-canvas>*{position:absolute;inset:0;width:100%;height:100%}body .coloring-brush{z-index:1;touch-action:none;cursor:crosshair}body .coloring-lineart{z-index:3;object-fit:contain;pointer-events:none;mix-blend-mode:multiply;filter:contrast(1.05)}.coloring-sky,.coloring-hill,.coloring-ground,.coloring-flower,.coloring-prop,.coloring-character{display:none!important}
 /* Brush controls and the gentle finished-picture celebration. */
 .coloring-tools{display:flex;align-items:center;justify-content:center;gap:10px;margin:2px auto 12px}.color-picker,.brush-picker{display:flex;align-items:center;gap:6px;padding:6px 9px;border:2px solid #eadac1;border-radius:14px;background:#fffdf4;color:#8e7b6b;font-size:.68rem;font-weight:900}.color-picker input{width:27px;height:27px;padding:0;border:0;border-radius:50%;background:none}.brush-picker button{min-width:27px;height:26px;border-radius:8px;background:#f8f0e2;color:#947b69;font-size:.6rem;font-weight:900}.brush-picker button.selected{background:#a5cfa5;color:#fff}.coloring-done{display:block;margin:10px auto 16px;background:#f3a9b8;box-shadow:0 4px 0 #d8899b}.coloring-celebration{position:fixed;z-index:30;inset:0;display:grid;place-items:center;background:#fff9e8b8;backdrop-filter:blur(3px)}.coloring-celebration-card{width:min(84vw,340px);padding:20px 18px 22px;border:5px solid #fffdf4;border-radius:31px;background:linear-gradient(#fff9e9,#f7e9fa);box-shadow:0 13px 32px #78617b55;text-align:center;animation:coloring-celebrate .55s cubic-bezier(.16,.9,.25,1.25)}.coloring-celebration-stars{color:#e599aa;font-size:1.15rem;letter-spacing:.25rem}.coloring-celebration-card img{display:block;width:205px;height:160px;margin:-9px auto -2px;object-fit:contain}.coloring-celebration-card p{margin:0;color:#8e7792;font-weight:900;font-size:.88rem}.coloring-celebration-card h2{margin:5px 0 14px;color:#da8599;font-size:1.55rem}@keyframes coloring-celebrate{from{transform:translateY(20px) scale(.72);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}
+
+/* Keep controls within narrow mobile viewports such as the iPhone 11 Pro (375px CSS width). */
+.topbar > *,
+.game-header > *,
+.memory-header > *,
+.garden-controls > *,
+.coloring-tools > * { min-width:0; }
+.memory-header { grid-template-columns:minmax(0,1fr) auto minmax(0,1fr); }
+.activity-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+.activity-button { min-width:0; overflow-wrap:anywhere; }
+.garden-controls,
+.coloring-tools { flex-wrap:wrap; }
+
+@media (max-width:400px) {
+  .topbar { padding-inline:16px; }
+  .screen { padding-inline:16px; }
+  .memory-header { gap:4px; }
+  .memory-header b { font-size:1rem; }
+  .garden-controls,
+  .coloring-tools { gap:8px; }
+}
