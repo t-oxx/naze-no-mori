@@ -24,18 +24,87 @@
         </div>
         <p class="eyebrow">モヤちゃんとピコちゃんと</p>
         <h1>なぜの森を<br />たんけんしよう！</h1>
-        <p class="intro">「なんで？」を見つけて、ひらめきを集めよう。</p>
-        <div class="age-picker" aria-label="年齢を選ぶ">
-          <p>きみの年れいは？</p>
-          <div class="choice-row">
-            <button class="age-button" data-age="4-6">4〜6さい</button>
-            <button class="age-button" data-age="7-9">7〜9さい</button>
-            <button class="age-button selected" data-age="10-12">10〜12さい</button>
+        <p class="intro">みて、きいて、かんがえて。ひらめきを集めよう。</p>
+        <div class="play-picker" aria-label="あそびをえらぶ">
+          <p>あそびを えらぼう</p>
+          <div class="activity-grid">
+            <button id="startButton" type="button" class="activity-button study-activity" onclick="startStudy()"><span class="activity-icon">✏️</span><span><b>おべんきょう<br />たんけん</b><small>みて・きいて・かんがえる</small></span></button>
+            <button id="memoryButton" type="button" class="activity-button memory-activity" onclick="startMemory()" aria-label="英語カードであそぶ English Memory"><span class="memory-mode-preview" aria-hidden="true"><span>🍎</span><span class="preview-back"><img src="./assets/moya.png" alt="" /><img src="./assets/piko.png" alt="" /></span></span><span><b>英語カード<br />であそぶ</b><small>English Memory</small></span></button>
+            <button id="ideaButton" type="button" class="activity-button idea-activity" onclick="startIdea()"><span class="activity-icon">💡</span><span><b>ひらめき<br />あそび</b><small>みて・くらべて・えらぼう</small></span></button>
+            <button id="makeButton" type="button" class="activity-button make-activity" onclick="startMake()"><span class="activity-icon">🌳</span><span><b>もりづくり<br />あそび</b><small>すきな もりを つくろう</small></span></button>
+            <button id="puzzleButton" type="button" class="activity-button puzzle-activity" onclick="startPuzzle()"><span class="activity-icon">🧩</span><span><b>くるくる<br />パズル</b><small>もりの えを つなげよう</small></span></button>
+            <button id="coloringButton" type="button" class="activity-button coloring-activity" onclick="startColoring()"><span class="coloring-preview" aria-hidden="true"><img src="./assets/moya.png" alt="" /></span><span><b>いろぬり<br />あそび</b><small>すきな いろで かざろう</small></span></button>
           </div>
         </div>
-        <button id="startButton" class="primary-button">はじめる <span>→</span></button>
-        <a class="save-app-link" href="../なぜの森おべんきょうアプリ.zip" download>💾 アプリを保存する（ZIP）</a>
       </section>
+
+      <section id="studyAge" class="screen study-age-screen hidden">
+        <div class="study-age-card"><div class="hero-characters compact-characters" aria-hidden="true"><div class="character sprite moya hero-moya"><img src="./assets/moya.png" alt="" /></div><div class="character sprite piko hero-piko"><img src="./assets/piko.png" alt="" /></div></div><p class="eyebrow">おべんきょう たんけん</p><h1>きみの年れいは？</h1><p class="intro">ぴったりの もんだいを だすよ</p><div class="age-picker" aria-label="年齢を選ぶ"><div class="choice-row"><button class="age-button" data-age="4-6">4〜6さい</button><button class="age-button" data-age="7-9">7〜9さい</button><button class="age-button selected" data-age="10-12">10〜12さい</button></div></div><button class="primary-button" type="button" onclick="beginStudy()">たんけんを はじめる <span>→</span></button><button class="finish-button" type="button" onclick="goHome()">あそびを えらびなおす</button></div>
+      </section>
+
+      <section id="memory" class="screen memory-screen hidden">
+        <div class="memory-header"><button id="memoryHomeButton" class="text-button">‹ もりへもどる</button><div><b>English Memory</b><small>えいごカード</small></div><button id="memorySoundButton" class="memory-sound" aria-pressed="true">🔊 ON</button></div>
+        <div class="memory-status"><span>そろったペア <b id="memoryPairs">0</b> / 4</span><span class="memory-leaf">🍃</span></div>
+        <div class="memory-guide"><img id="memoryGuideCharacter" src="./assets/moya.png" alt="モヤちゃん" /><p id="memoryGuideText">カードを さわってみよう</p></div>
+        <div id="memoryGrid" class="memory-grid" aria-label="英語のカード"></div>
+      </section>
+
+      <section id="memoryComplete" class="screen memory-complete-screen hidden">
+        <div class="memory-complete-card"><img src="./assets/correct-hug.png" alt="モヤちゃんとピコちゃんがよろこんでいる" /><p class="eyebrow">ぜんぶ みつけたね！</p><h2>ピコーン！</h2><p>モヤちゃんとピコちゃんも<br />とっても うれしいよ</p><button id="memoryAgainButton" class="primary-button">もういちど あそぶ <span>↻</span></button><button id="memoryFinishButton" class="finish-button">もりへもどる</button></div>
+      </section>
+
+      <section id="idea" class="screen idea-screen hidden">
+        <div class="memory-header"><button id="ideaHomeButton" class="text-button">‹ もりへもどる</button><div><b>ひらめき あそび</b><small>みて・くらべて・えらぼう</small></div><span class="idea-count"><b id="ideaCount">1</b> / 10</span></div>
+        <div class="idea-characters" aria-hidden="true"><img src="./assets/moya.png" alt="" /><img src="./assets/piko.png" alt="" /></div>
+        <article class="idea-card"><p id="ideaPrompt">つぎは どれかな？</p><div id="ideaSequence" class="idea-sequence"></div><div id="ideaChoices" class="idea-choices"></div><p id="ideaFeedback" class="idea-feedback" aria-live="polite"></p></article>
+        <button id="ideaNextButton" class="primary-button next-button hidden">つぎの ひらめき <span>→</span></button>
+      </section>
+
+      <section id="make" class="screen make-screen hidden">
+        <div class="memory-header"><button id="makeHomeButton" class="text-button">‹ もりへもどる</button><div><b>もりづくり あそび</b><small>すきな もりを つくろう</small></div><button id="makeClearButton" class="memory-sound">やりなおす</button></div>
+        <p id="makeMessage" class="make-message">なぜのたねを うえて、もりを そだてよう</p>
+        <div id="makeGarden" class="make-garden" aria-label="なぜの森のそだてるにわ"><div class="garden-soil" aria-hidden="true"></div><div id="makeItems" class="make-items"></div><div id="gardenRain" class="garden-rain" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><img id="gardenCompanion" class="garden-companion" alt="モヤちゃんとピコちゃんが育つ芽を見守っている" /></div>
+        <div class="make-toolbar" aria-label="にわでつかうものをえらぶ">
+          <button class="make-tool selected" data-item="seed"><span class="stamp-icon stamp-seed"></span><small>なぜのたね</small></button>
+          <button class="make-tool" data-item="tree"><span class="tree-stamp"></span><small>ひらめきの木</small></button>
+          <button class="make-tool" data-item="moyaHome"><span class="home-stamp"></span><small>モヤのおうち</small></button>
+          <button class="make-tool" data-item="pikoHome"><span class="home-stamp"></span><small>ピコのおうち</small></button>
+          <button class="make-tool" data-item="lupeHome"><span class="home-stamp"></span><small>ルペのおうち</small></button>
+          <button class="make-tool" data-item="hugHome"><span class="home-stamp"></span><small>ハグのおうち</small></button>
+          <button class="make-tool" data-item="flowerPath"><span class="decor-stamp"></span><small>はなのこみち</small></button>
+          <button class="make-tool" data-item="lanternTree"><span class="decor-stamp"></span><small>あかりの木</small></button>
+          <button class="make-tool" data-item="bookBench"><span class="decor-stamp"></span><small>ほんのベンチ</small></button>
+          <button class="make-tool" data-item="pond"><span class="decor-stamp"></span><small>ひらめきの池</small></button>
+          <button class="make-tool water-tool" data-item="water"><span class="watering-can-icon"></span><small>おみずを<br />あげる</small></button>
+        </div>
+        <div class="garden-controls"><div class="house-size-picker" aria-label="設置するものの大きさ"><span>大きさ</span><button class="house-size" data-scale=".72">小</button><button class="house-size selected" data-scale="1">ふつう</button><button class="house-size" data-scale="1.28">大</button></div><button id="callFriendButton" class="call-friend-button" type="button">友だちを よぶ <span>♧</span></button></div>
+        <button id="makeDoneButton" class="primary-button make-done">にわを みせる <span>✦</span></button>
+      </section>
+
+      <section id="puzzle" class="screen puzzle-screen hidden">
+        <div class="memory-header"><button id="puzzleHomeButton" class="text-button">‹ もりへもどる</button><div><b>くるくる パズル</b><small>ピースを まわして つなげよう</small></div><span class="idea-count"><b id="puzzleCount">1</b> / 10</span></div>
+        <p id="puzzleMessage" class="make-message">ピースを さわって、えを つなげよう</p>
+        <div id="puzzleBoard" class="puzzle-board" aria-label="くるくるパズル"></div>
+        <div class="puzzle-guides" aria-hidden="true"><img src="./assets/moya.png" alt="" /><img id="puzzlePiko" src="./assets/piko.png" alt="" /></div>
+        <button id="puzzleNextButton" class="primary-button next-button hidden">つぎの もり <span>→</span></button>
+      </section>
+
+      <section id="coloring" class="screen coloring-screen hidden">
+        <div class="memory-header"><button id="coloringHomeButton" class="text-button">‹ もりへもどる</button><div><b>いろぬり あそび</b><small id="coloringSubtitle">モヤちゃんの なぜのにわ</small></div><button id="coloringResetButton" class="memory-sound">やりなおす</button></div>
+        <p id="coloringGuide" class="coloring-guide">いろをえらんで、まわりを タップしてね</p>
+        <div id="coloringCanvas" class="coloring-canvas" aria-label="いろぬりのえ"></div>
+        <div id="coloringPalette" class="coloring-palette" aria-label="いろをえらぶ"></div>
+        <div class="coloring-tools"><label class="color-picker">じぶんの いろ <input id="coloringCustomColor" type="color" value="#f7a9bd" /></label><div class="brush-picker" aria-label="ふでの太さ"><span>ふで</span><button type="button" data-brush="14">細</button><button type="button" class="selected" data-brush="27">中</button><button type="button" data-brush="43">太</button></div></div>
+        <div class="coloring-switcher"><button id="coloringPrevButton" type="button">‹</button><div id="coloringSceneDots" class="coloring-scene-dots" aria-label="えをえらぶ"></div><button id="coloringNextButton" type="button">›</button></div>
+        <p id="coloringFinish" class="coloring-finish" aria-live="polite"></p>
+        <button id="coloringDoneButton" type="button" class="primary-button coloring-done">できた！ <span>✦</span></button>
+      </section>
+
+      <div id="coloringCelebration" class="coloring-celebration hidden" role="status" aria-live="polite"><div class="coloring-celebration-card"><div class="coloring-celebration-stars" aria-hidden="true">✦　♡　✦　♡　✦</div><img src="./assets/correct-hug.png" alt="モヤちゃんとピコちゃんがお祝いしている" /><p>じぶんだけの いろが できたね！</p><h2>できあがり！</h2><button id="coloringCelebrationClose" type="button" class="primary-button">もっと ぬる <span>✦</span></button></div></div>
+
+      <div id="puzzleCelebration" class="puzzle-celebration hidden" role="status" aria-live="polite"><div class="puzzle-celebration-panel"><div class="puzzle-celebration-burst" aria-hidden="true">✦　♥　✦　♥</div><img id="puzzleCelebrationArt" class="puzzle-celebration-art" src="" alt="完成したパズルの絵" /><div class="puzzle-celebration-friends"><img src="./assets/moya.png" alt="モヤちゃん" /><img src="./assets/piko.png" alt="ピコちゃん" /></div><p id="puzzleCelebrationText">つながったね！</p><button id="puzzleContinueButton" class="puzzle-continue-button" type="button">つぎの えへ <span>→</span></button></div></div>
+
+      <div id="makeCelebration" class="make-celebration hidden" role="status" aria-live="polite"><div class="make-celebration-card"><div class="make-hearts" aria-hidden="true"><span>♥</span><span>♥</span><span>♥</span><span>♥</span></div><div class="make-celebrate-friends"><img src="./assets/moya.png" alt="モヤちゃん" /><img src="./assets/piko.png" alt="ピコちゃん" /></div><p>モヤちゃんとピコちゃんから</p><h2>すてきな もりが<br />できたね！</h2><button id="makeCelebrationClose" class="primary-button">もっと つくる <span>✦</span></button></div></div>
 
       <section id="game" class="screen game-screen hidden">
         <div class="game-header"><button id="homeButton" class="text-button">‹ もりへもどる</button><div class="seed-count">ひらめきのたね <b id="seedCount">0</b> ✦</div></div>
