@@ -148,6 +148,7 @@ body .coloring-canvas{height:min(108vw,500px);max-height:510px;background:#fffdf
 .activity-button { min-width:0; overflow-wrap:anywhere; }
 .garden-controls,
 .coloring-tools { flex-wrap:wrap; }
+.garden-item { scale:var(--place-scale,1); transform-origin:center; }
 
 @media (max-width:400px) {
   .topbar { padding-inline:16px; }

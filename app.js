@@ -356,12 +356,58 @@ function startMake() {
   makeCelebration.classList.add('hidden'); clearMake(); make.classList.remove('hidden');
 }
 function clearMake() { plantedSeed = false; gardenGrown = false; waterCount = 0; clearTimeout(dryTimer); $('makeItems').innerHTML = ''; $('gardenRain').classList.remove('is-raining'); $('makeGarden').classList.remove('is-grown','is-watered','is-drying','is-tended'); $('makeMessage').textContent = 'なぜのたねを うえて、もりを そだてよう'; }
+
+const gardenItemSizes = {
+  seed: [98, 112], tree: [138, 140], moyaHome: [155, 155], pikoHome: [155, 155],
+  lupeHome: [155, 155], hugHome: [155, 155], flowerPath: [132, 96],
+  lanternTree: [116, 140], bookBench: [116, 93], pond: [138, 105], visitor: [108, 112]
+};
+
+function getGardenFitScale(garden) {
+  return Math.min(1, Math.max(0.6, garden.clientWidth / 520));
+}
+
+function applyGardenItemScale(item, garden) {
+  const userScale = Number(item.dataset.userScale || 1);
+  item.style.setProperty('--place-scale', String(getGardenFitScale(garden) * userScale));
+}
+
+function getGardenPlacement(garden, type, pointerX, pointerY, userScale = 1) {
+  const bounds = garden.getBoundingClientRect();
+  const [itemWidth, itemHeight] = gardenItemSizes[type] || [108, 108];
+  const fitScale = getGardenFitScale(garden) * userScale;
+  const xInset = Math.max(4, ((itemWidth * fitScale / 2 + 6) / bounds.width) * 100);
+  const yInset = Math.max(4, ((itemHeight * fitScale / 2 + 6) / bounds.height) * 100);
+  const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+  const top = type === 'seed' ? clamp(clamp(pointerY, 58, 84), yInset, 100 - yInset) : clamp(pointerY, yInset, 100 - yInset);
+
+  return {
+    left: `${clamp(pointerX, xInset, 100 - xInset)}%`,
+    top: `${top}%`
+  };
+}
+
+function refreshGardenItemScales() {
+  const garden = $('makeGarden');
+  [...$('makeItems').children].forEach((item) => {
+    applyGardenItemScale(item, garden);
+    if (!item.dataset.itemType) return;
+    const placement = getGardenPlacement(
+      garden,
+      item.dataset.itemType,
+      Number(item.dataset.pointerLeft),
+      Number(item.dataset.pointerTop),
+      Number(item.dataset.userScale || 1)
+    );
+    item.style.left = placement.left;
+    item.style.top = placement.top;
+  });
+}
+
 function placeMakeItem(event) {
   const garden = $('makeGarden'), bounds = garden.getBoundingClientRect();
-  const left = `${Math.max(4, Math.min(96, (event.clientX - bounds.left) / bounds.width * 100))}%`;
-  const pointerTop = Math.max(6, Math.min(91, (event.clientY - bounds.top) / bounds.height * 100));
-  // Seeds stay on the soil bed, but can be placed freely anywhere inside it.
-  const top = `${selectedMakeItem === 'seed' ? Math.max(58, Math.min(84, pointerTop)) : pointerTop}%`;
+  const pointerLeft = (event.clientX - bounds.left) / bounds.width * 100;
+  const pointerTop = (event.clientY - bounds.top) / bounds.height * 100;
   if (selectedMakeItem === 'water') {
     if (!plantedSeed) { $('makeMessage').textContent = 'まずは なぜのたねを うえてみよう'; return; }
     waterCount++;
@@ -382,8 +428,14 @@ function placeMakeItem(event) {
   if (selectedMakeItem === 'lupe') { item.src = './assets/lupe-friend.png'; item.alt = 'ルペくん'; }
   else if (selectedMakeItem === 'seed') { item.src = gardenArt.seed || ''; item.alt = 'なぜのたね'; }
   else { item.src = homeArt[selectedMakeItem] || decorArt[selectedMakeItem] || ''; item.alt = ''; }
-  item.style.left = left; item.style.top = top;
-  if (selectedMakeItem !== 'seed') item.style.setProperty('--place-scale', selectedPlaceScale);
+  const userScale = selectedMakeItem === 'seed' ? 1 : selectedPlaceScale;
+  const placement = getGardenPlacement(garden, selectedMakeItem, pointerLeft, pointerTop, userScale);
+  item.dataset.itemType = selectedMakeItem;
+  item.dataset.pointerLeft = String(pointerLeft);
+  item.dataset.pointerTop = String(pointerTop);
+  item.dataset.userScale = String(userScale);
+  item.style.left = placement.left; item.style.top = placement.top;
+  applyGardenItemScale(item, garden);
   if (selectedMakeItem === 'seed') { const seedNumber = $('makeItems').querySelectorAll('.garden-seed').length; item.classList.add('garden-seed'); item.dataset.waterCount = '0'; item.dataset.flowerHue = [0, 48, 105, 168, 235, 292][seedNumber % 6]; plantedSeed = true; $('makeMessage').textContent = 'なぜのたねを うえたよ。おみずを あげてみよう'; }
   else $('makeMessage').textContent = selectedMakeItem === 'lupe' ? 'ルペくんも あそびに きたよ！' : 'いいね！ もっと すてきな にわにしよう';
   $('makeItems').append(item);
@@ -521,9 +573,16 @@ $('callFriendButton').addEventListener('click', () => {
   ];
   const friend = friends[Math.floor(Math.random() * friends.length)], item = document.createElement('img');
   item.className = 'garden-item garden-visitor'; item.src = friend.src; item.alt = friend.name;
-  item.style.left = `${28 + Math.random() * 58}%`; item.style.top = `${24 + Math.random() * 48}%`;
+  const garden = $('makeGarden');
+  const pointerLeft = 28 + Math.random() * 58, pointerTop = 24 + Math.random() * 48;
+  const placement = getGardenPlacement(garden, 'visitor', pointerLeft, pointerTop);
+  item.dataset.itemType = 'visitor'; item.dataset.pointerLeft = String(pointerLeft); item.dataset.pointerTop = String(pointerTop); item.dataset.userScale = '1'; item.style.left = placement.left; item.style.top = placement.top;
+  applyGardenItemScale(item, garden);
   $('makeItems').append(item); $('makeMessage').textContent = `${friend.name}が あそびに きたよ！`;
 });
+if ('ResizeObserver' in window) new ResizeObserver(refreshGardenItemScales).observe($('makeGarden'));
+else window.addEventListener('resize', refreshGardenItemScales);
+refreshGardenItemScales();
 prepareStampArt();
 prepareHomeArt();
 prepareDecorArt();
