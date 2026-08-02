@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>なぜの森 おべんきょうアプリ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div class="brand"><span>？</span> なぜの森 <small>おべんきょう</small></div>
+        <button id="soundButton" class="icon-button" aria-label="問題を読み上げる">🔊</button>
+      </header>
+
+      <section id="welcome" class="screen welcome-screen">
+        <div class="forest-dots dots-a"></div><div class="forest-dots dots-b"></div>
+        <div class="hero-characters" aria-hidden="true">
+          <div class="character sprite moya hero-moya"><img src="./assets/moya.png" alt="モヤちゃん" /></div>
+          <div class="character sprite piko hero-piko"><img src="./assets/piko.png" alt="ピコちゃん" /></div>
+        </div>
+        <p class="eyebrow">モヤちゃんとピコちゃんと</p>
+        <h1>なぜの森を<br />たんけんしよう！</h1>
+        <p class="intro">「なんで？」を見つけて、ひらめきを集めよう。</p>
+        <div class="age-picker" aria-label="年齢を選ぶ">
+          <p>きみの年れいは？</p>
+          <div class="choice-row">
+            <button class="age-button" data-age="4-6">4〜6さい</button>
+            <button class="age-button" data-age="7-9">7〜9さい</button>
+            <button class="age-button selected" data-age="10-12">10〜12さい</button>
+          </div>
+        </div>
+        <button id="startButton" class="primary-button">はじめる <span>→</span></button>
+        <a class="save-app-link" href="../なぜの森おべんきょうアプリ.zip" download>💾 アプリを保存する（ZIP）</a>
+      </section>
+
+      <section id="game" class="screen game-screen hidden">
+        <div class="game-header"><button id="homeButton" class="text-button">‹ もりへもどる</button><div class="seed-count">ひらめきのたね <b id="seedCount">0</b> ✦</div></div>
+        <div class="mix-note"><span>✦</span> 算数・国語・English・理科社会がランダムに出るよ</div>
+        <div id="friendSquad" class="friend-squad hidden" aria-label="なかま"><span>なかま</span><div id="friendSquadImages"></div></div>
+        <div id="stageScene" class="stage-scene" data-stage="0"><span id="stageSceneIcon">🌱</span><div><b id="stageSceneTitle">はじまりの小道</b><small id="stageSceneText">モヤちゃんとピコちゃんの森</small></div></div>
+        <article class="quiz-card">
+          <div class="quiz-top"><span id="subjectTag" class="subject-tag">English</span><span id="progress">1 / 5</span></div>
+          <div class="quiz-scene">
+            <div class="character sprite moya mini-moya"><img src="./assets/moya.png" alt="モヤちゃん" /></div>
+            <p id="moyaLine" class="speech">これ、なんでだろう？</p>
+          </div>
+          <h2 id="questionText">問題を読み込み中…</h2>
+          <div id="choices" class="choices"></div>
+          <p id="feedback" class="feedback" aria-live="polite"></p>
+          <div class="piko-row"><div id="pikoAnswer" class="character sprite piko answer-piko"><img src="./assets/piko.png" alt="ピコちゃん" /></div><p>ピコちゃんと答えを見つけよう！</p></div>
+        </article>
+        <button id="nextButton" class="primary-button next-button hidden">つぎの問題 <span>→</span></button>
+      </section>
+
+      <section id="break" class="screen break-screen hidden">
+        <div class="break-card">
+          <div class="break-characters" aria-hidden="true"><img src="./assets/moya.png" alt="" /><img src="./assets/piko.png" alt="" /></div>
+          <p id="resultEyebrow" class="eyebrow">10もん できたよ！</p>
+          <h2 id="resultTitle">ひと休みしよう ☕</h2>
+          <p id="resultMessage">よくがんばったね。お水をのんだり、のびをしたりしてから、またあそぼう。</p>
+          <div class="forest-map" aria-label="森のすすみ具合"><span id="mapDot1">●</span><i>──</i><span id="mapDot2">●</span><i>──</i><span id="mapDot3">●</span><i>──</i><span id="mapDot4">★</span></div>
+          <div id="companionReveal" class="companion-reveal hidden"><img id="companionImage" src="" alt="" /><p id="companionMessage"></p></div>
+          <button id="continueButton" class="primary-button">あと10問やる <span>→</span></button>
+          <button id="finishButton" class="finish-button">きょうは おしまい</button>
+        </div>
+      </section>
+
+      <section id="ending" class="screen ending-screen hidden">
+        <div class="ending-card">
+          <div class="home-friends" aria-hidden="true">
+            <img src="./assets/moya.png" alt="" /><img src="./assets/piko.png" alt="" /><img src="./assets/mite-friend.png" alt="" /><img src="./assets/lupe-friend.png" alt="" /><img src="./assets/hug-friend.png" alt="" />
+          </div>
+          <p class="eyebrow">きょうは ここまで！</p>
+          <h2>みんなで お家に帰ろう</h2>
+          <p>たくさん考えて、よくがんばったね。なぜの森のみんなも、また明日あそべるのを楽しみにしているよ。</p>
+          <button id="endHomeButton" class="primary-button">また明日 <span>→</span></button>
+        </div>
+      </section>
+
+      <div id="reactionOverlay" class="reaction-overlay hidden" role="status" aria-live="polite">
+        <div id="reactionVisual" class="reaction-visual"><div class="heart-flight" aria-hidden="true"><span>♥</span><span>♥</span><span>♥</span><span>♥</span><span>♥</span></div><div id="reactionFriends" class="reaction-friends" aria-hidden="true"></div><img id="reactionImage" src="" alt="" /><p id="reactionText"></p></div>
+      </div>
+    </main>
+    <script src="./app.js"></script>
+  </body>
+</html>
